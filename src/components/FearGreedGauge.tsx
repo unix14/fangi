@@ -17,8 +17,8 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
   // Normalize value between 0 and 100
   const normalizedValue = Math.min(Math.max(value, 0), 100);
   
-  // Calculate rotation based on value
-  const rotation = (normalizedValue / 100) * 180 - 90;
+  // Calculate rotation based on value (adjusted for proper orientation)
+  const rotation = (normalizedValue / 100) * 180;
   
   // Determine sentiment color
   const getSentimentColor = (value: number) => {
@@ -42,25 +42,27 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
     <div className={cn("relative", className)}>
       <svg
         width={size}
-        height={size / 2}
-        viewBox={`0 0 ${size} ${size / 2}`}
-        className="transform -rotate-90"
+        height={size / 1.6}
+        viewBox="0 0 300 200"
+        className="transform rotate-0"
       >
         {/* Background arc */}
         <path
-          d="M 25 150 A 125 125 0 0 1 275 150"
+          d="M 50 150 A 100 100 0 0 1 250 150"
           fill="none"
           stroke="#374151"
-          strokeWidth="40"
+          strokeWidth="30"
+          strokeLinecap="round"
           className="transition-all duration-300"
         />
         
         {/* Value arc */}
         <path
-          d="M 25 150 A 125 125 0 0 1 275 150"
+          d="M 50 150 A 100 100 0 0 1 250 150"
           fill="none"
           stroke="currentColor"
-          strokeWidth="40"
+          strokeWidth="30"
+          strokeLinecap="round"
           strokeDasharray={`${normalizedValue}, 100`}
           className={cn(
             "transition-all duration-1000",
@@ -71,33 +73,33 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
         />
         
         {/* Needle */}
-        <line
-          x1="150"
-          y1="150"
-          x2="150"
-          y2="40"
-          stroke="#ffffff"
-          strokeWidth="4"
-          className="transition-all duration-1000 origin-bottom"
+        <g
+          className="transition-all duration-1000 origin-center"
           style={{
             transform: `rotate(${rotation}deg)`,
             transformOrigin: '150px 150px',
           }}
-        />
-        
-        {/* Center circle */}
-        <circle
-          cx="150"
-          cy="150"
-          r="15"
-          fill="#ffffff"
-          className="transition-all duration-300"
-        />
+        >
+          <line
+            x1="150"
+            y1="150"
+            x2="150"
+            y2="60"
+            stroke="#ffffff"
+            strokeWidth="4"
+          />
+          <circle
+            cx="150"
+            cy="150"
+            r="15"
+            fill="#ffffff"
+          />
+        </g>
       </svg>
       
       {/* Value display */}
       <div className="absolute inset-0 flex flex-col items-center justify-end pb-4">
-        <span className={cn("text-5xl font-bold", getSentimentColor(normalizedValue))}>
+        <span className={cn("text-6xl font-bold", getSentimentColor(normalizedValue))}>
           {normalizedValue}
         </span>
         <span className="text-2xl font-semibold text-white mt-2">

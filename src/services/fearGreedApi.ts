@@ -1,4 +1,5 @@
 const FEAR_GREED_API_URL = 'https://fear-and-greed-index.p.rapidapi.com/v1/fgi';
+const RAPID_API_KEY = '8a90abcabemshb4d2b78214894abp1ad400jsnb56047076b7d';
 
 export const fetchFearGreedIndex = async () => {
   try {
@@ -7,7 +8,7 @@ export const fetchFearGreedIndex = async () => {
       method: 'GET',
       headers: {
         'x-rapidapi-host': 'fear-and-greed-index.p.rapidapi.com',
-        'x-rapidapi-key': localStorage.getItem('RAPID_API_KEY') || '',
+        'x-rapidapi-key': RAPID_API_KEY,
       },
     });
 

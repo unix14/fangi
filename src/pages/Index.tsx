@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react';
 import { FearGreedGauge } from '@/components/FearGreedGauge';
 import { Button } from '@/components/ui/button';
 import { fetchFearGreedIndex } from '@/services/fearGreedApi';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const [fearGreedValue, setFearGreedValue] = useState(38);
@@ -17,15 +17,6 @@ const Index = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Check if API key exists
-      const apiKey = localStorage.getItem('RAPID_API_KEY');
-      if (!apiKey) {
-        const key = prompt('Please enter your RapidAPI key for the Fear & Greed Index:');
-        if (key) {
-          localStorage.setItem('RAPID_API_KEY', key);
-        }
-      }
-
       const data = await fetchFearGreedIndex();
       if (data) {
         setFearGreedValue(data.value);
