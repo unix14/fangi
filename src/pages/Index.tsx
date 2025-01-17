@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { FearGreedGauge } from '@/components/FearGreedGauge';
 import { Button } from '@/components/ui/button';
+import { fetchFearGreedIndex } from '@/services/fearGreedApi';
+import { useToast } from '@/components/ui/use-toast';
 
 const Index = () => {
   const [fearGreedValue, setFearGreedValue] = useState(38);
@@ -11,23 +13,35 @@ const Index = () => {
     oneMonthAgo: 'Neutral',
     oneYearAgo: 'Greed'
   });
+  const { toast } = useToast();
 
-  // Simulated data fetch - replace with actual API call
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        // In a real app, this would be an API call
-        const randomValue = Math.floor(Math.random() * (100 - 30 + 1)) + 30;
-        setFearGreedValue(randomValue);
-      } catch (error) {
-        console.error('Error fetching fear and greed data:', error);
+      // Check if API key exists
+      const apiKey = localStorage.getItem('RAPID_API_KEY');
+      if (!apiKey) {
+        const key = prompt('Please enter your RapidAPI key for the Fear & Greed Index:');
+        if (key) {
+          localStorage.setItem('RAPID_API_KEY', key);
+        }
+      }
+
+      const data = await fetchFearGreedIndex();
+      if (data) {
+        setFearGreedValue(data.value);
+      } else {
+        toast({
+          title: "Error fetching data",
+          description: "Could not fetch Fear & Greed Index. Using demo data instead.",
+          variant: "destructive",
+        });
       }
     };
 
     fetchData();
     const interval = setInterval(fetchData, 60000); // Update every minute
     return () => clearInterval(interval);
-  }, []);
+  }, [toast]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-financial-navy to-gray-900 text-white">
