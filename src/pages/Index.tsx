@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Info, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { FearGreedGauge } from '@/components/FearGreedGauge';
 import { Button } from '@/components/ui/button';
-import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card';
 
 const Index = () => {
   const [fearGreedValue, setFearGreedValue] = useState(38);
@@ -34,32 +33,13 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-b from-financial-navy to-gray-900 text-white">
       {/* Header */}
       <header className="p-4 flex justify-between items-center">
-        <div className="flex gap-2">
-          <Button
-            variant="ghost"
-            className="text-white hover:text-financial-gold"
-            onClick={() => window.open('https://www.cnn.com/markets/fear-and-greed', '_blank')}
-          >
-            Read more <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-          
-          <HoverCard>
-            <HoverCardTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-white hover:text-financial-gold">
-                <Info className="h-5 w-5" />
-              </Button>
-            </HoverCardTrigger>
-            <HoverCardContent className="w-80 bg-gray-800 text-white border-gray-700">
-              <div className="space-y-2">
-                <h4 className="text-sm font-semibold">Fear & Greed Index</h4>
-                <p className="text-sm">
-                  The Fear & Greed Index is a tool for evaluating market sentiment,
-                  combining 7 different market indicators to measure investor emotions.
-                </p>
-              </div>
-            </HoverCardContent>
-          </HoverCard>
-        </div>
+        <Button
+          variant="ghost"
+          className="text-white hover:text-financial-gold"
+          onClick={() => window.open('https://www.cnn.com/markets/fear-and-greed', '_blank')}
+        >
+          Read more <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
         
         <h1 className="text-sm font-light text-center text-white/80 absolute left-1/2 -translate-x-1/2">
           Fear & Greed Index

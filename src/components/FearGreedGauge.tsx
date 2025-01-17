@@ -22,11 +22,11 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
   
   // Determine sentiment color
   const getSentimentColor = (value: number) => {
-    if (value <= 25) return 'text-red-500';
+    if (value <= 25) return 'text-financial-red';
     if (value <= 45) return 'text-orange-500';
-    if (value <= 55) return 'text-yellow-500';
+    if (value <= 55) return 'text-financial-gold';
     if (value <= 75) return 'text-lime-500';
-    return 'text-green-500';
+    return 'text-financial-green';
   };
 
   // Get sentiment text
@@ -50,8 +50,8 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
         <path
           d="M 25 150 A 125 125 0 0 1 275 150"
           fill="none"
-          stroke="#e5e7eb"
-          strokeWidth="30"
+          stroke="#374151"
+          strokeWidth="40"
           className="transition-all duration-300"
         />
         
@@ -60,7 +60,7 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
           d="M 25 150 A 125 125 0 0 1 275 150"
           fill="none"
           stroke="currentColor"
-          strokeWidth="30"
+          strokeWidth="40"
           strokeDasharray={`${normalizedValue}, 100`}
           className={cn(
             "transition-all duration-1000",
@@ -75,8 +75,8 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
           x1="150"
           y1="150"
           x2="150"
-          y2="60"
-          stroke="#1f2937"
+          y2="40"
+          stroke="#ffffff"
           strokeWidth="4"
           className="transition-all duration-1000 origin-bottom"
           style={{
@@ -89,18 +89,18 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
         <circle
           cx="150"
           cy="150"
-          r="10"
-          fill="#1f2937"
+          r="15"
+          fill="#ffffff"
           className="transition-all duration-300"
         />
       </svg>
       
       {/* Value display */}
       <div className="absolute inset-0 flex flex-col items-center justify-end pb-4">
-        <span className={cn("text-4xl font-bold", getSentimentColor(normalizedValue))}>
+        <span className={cn("text-5xl font-bold", getSentimentColor(normalizedValue))}>
           {normalizedValue}
         </span>
-        <span className="text-xl font-semibold text-gray-600">
+        <span className="text-2xl font-semibold text-white mt-2">
           {getSentimentText(normalizedValue)}
         </span>
       </div>
