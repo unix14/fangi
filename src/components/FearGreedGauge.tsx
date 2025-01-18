@@ -20,13 +20,13 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
   // Calculate rotation based on value (adjusted for proper orientation)
   const rotation = (normalizedValue / 100) * 180;
   
-  // Determine sentiment color
+  // Determine sentiment color with updated color scheme
   const getSentimentColor = (value: number) => {
-    if (value <= 25) return 'text-financial-red';
-    if (value <= 45) return 'text-orange-500';
-    if (value <= 55) return 'text-financial-gold';
-    if (value <= 75) return 'text-lime-500';
-    return 'text-financial-green';
+    if (value <= 25) return 'text-red-500';
+    if (value <= 45) return 'text-orange-400';
+    if (value <= 55) return 'text-yellow-400';
+    if (value <= 75) return 'text-green-400';
+    return 'text-green-500';
   };
 
   // Get sentiment text
@@ -46,12 +46,20 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
         viewBox="0 0 300 200"
         className="transform rotate-0"
       >
-        {/* Background arc */}
+        {/* Background arc with gradient */}
+        <defs>
+          <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style={{ stopColor: '#ef4444', stopOpacity: 0.2 }} />
+            <stop offset="50%" style={{ stopColor: '#eab308', stopOpacity: 0.2 }} />
+            <stop offset="100%" style={{ stopColor: '#22c55e', stopOpacity: 0.2 }} />
+          </linearGradient>
+        </defs>
+        
         <path
           d="M 50 150 A 100 100 0 0 1 250 150"
           fill="none"
-          stroke="#374151"
-          strokeWidth="30"
+          stroke="url(#gaugeGradient)"
+          strokeWidth="35"
           strokeLinecap="round"
           className="transition-all duration-300"
         />
@@ -61,11 +69,11 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
           d="M 50 150 A 100 100 0 0 1 250 150"
           fill="none"
           stroke="currentColor"
-          strokeWidth="30"
+          strokeWidth="35"
           strokeLinecap="round"
           strokeDasharray={`${normalizedValue}, 100`}
           className={cn(
-            "transition-all duration-1000",
+            "transition-all duration-1000 drop-shadow-lg",
             getSentimentColor(normalizedValue),
             mounted && "animate-gauge-progress"
           )}
@@ -86,23 +94,25 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
             x2="150"
             y2="60"
             stroke="#ffffff"
-            strokeWidth="4"
+            strokeWidth="3"
+            className="drop-shadow-md"
           />
           <circle
             cx="150"
             cy="150"
-            r="15"
+            r="12"
             fill="#ffffff"
+            className="drop-shadow-lg"
           />
         </g>
       </svg>
       
       {/* Value display */}
       <div className="absolute inset-0 flex flex-col items-center justify-end pb-4">
-        <span className={cn("text-6xl font-bold", getSentimentColor(normalizedValue))}>
+        <span className={cn("text-6xl font-bold drop-shadow-lg", getSentimentColor(normalizedValue))}>
           {normalizedValue}
         </span>
-        <span className="text-2xl font-semibold text-white mt-2">
+        <span className="text-2xl font-semibold text-white mt-2 drop-shadow-md">
           {getSentimentText(normalizedValue)}
         </span>
       </div>

@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowRight } from 'lucide-react';
 import { FearGreedGauge } from '@/components/FearGreedGauge';
-import { Button } from '@/components/ui/button';
 import { fetchFearGreedIndex } from '@/services/fearGreedApi';
 import { useToast } from '@/hooks/use-toast';
 
@@ -37,16 +35,8 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-financial-navy to-gray-900 text-white">
       {/* Header */}
-      <header className="p-4 flex justify-between items-center">
-        <Button
-          variant="ghost"
-          className="text-white hover:text-financial-gold"
-          onClick={() => window.open('https://www.cnn.com/markets/fear-and-greed', '_blank')}
-        >
-          Read more <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
-        
-        <h1 className="text-sm font-light text-center text-white/80 absolute left-1/2 -translate-x-1/2">
+      <header className="p-4 flex justify-center items-center">
+        <h1 className="text-sm font-light text-center text-white/80">
           Fear & Greed Index
         </h1>
       </header>
