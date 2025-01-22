@@ -19,155 +19,138 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
   
   // Calculate rotation based on value (180 degree arc)
   const rotation = -90 + ((normalizedValue / 100) * 180);
-  
-  // Determine sentiment color
-  const getSentimentColor = (value: number) => {
-    if (value <= 25) return '#ef4444'; // Extreme Fear - Red
-    if (value <= 45) return '#f97316'; // Fear - Orange
-    if (value <= 55) return '#eab308'; // Neutral - Yellow
-    if (value <= 75) return '#22c55e'; // Greed - Light Green
-    return '#16a34a'; // Extreme Greed - Dark Green
-  };
 
-  // Get sentiment text
+  // Get sentiment text based on value
   const getSentimentText = (value: number) => {
-    if (value <= 25) return 'Extreme Fear';
-    if (value <= 45) return 'Fear';
-    if (value <= 55) return 'Neutral';
-    if (value <= 75) return 'Greed';
-    return 'Extreme Greed';
+    if (value <= 25) return 'EXTREME\nFEAR';
+    if (value <= 45) return 'FEAR';
+    if (value <= 55) return 'NEUTRAL';
+    if (value <= 75) return 'GREED';
+    return 'EXTREME\nGREED';
   };
 
   return (
     <div className={cn("relative flex flex-col items-center", className)}>
       <svg
         width={size}
-        height={(size / 2) + 60}
-        viewBox="-120 -120 240 180"
+        height={size / 1.5}
+        viewBox="-100 -80 200 160"
         className="transform"
       >
-        {/* Metallic ring gradient */}
+        {/* Background gradient */}
         <defs>
-          <linearGradient id="metalRing" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#8E9196" />
-            <stop offset="50%" stopColor="#8A898C" />
-            <stop offset="100%" stopColor="#555555" />
-          </linearGradient>
-          
-          {/* Background gradient */}
           <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ef4444" />
-            <stop offset="50%" stopColor="#eab308" />
-            <stop offset="100%" stopColor="#22c55e" />
-          </linearGradient>
-
-          {/* Metallic effect for needle */}
-          <linearGradient id="needleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#D1D1D1" />
-            <stop offset="50%" stopColor="#F5F5F5" />
-            <stop offset="100%" stopColor="#D1D1D1" />
+            <stop offset="0%" stopColor="#f3f3f3" />
+            <stop offset="100%" stopColor="#f3f3f3" />
           </linearGradient>
         </defs>
 
-        {/* Outer metallic ring */}
+        {/* Main background arc */}
         <path
-          d="M -110 0 A 110 110 0 0 1 110 0"
+          d="M -90 0 A 90 90 0 0 1 90 0"
           fill="none"
-          stroke="url(#metalRing)"
-          strokeWidth="8"
-          className="drop-shadow-lg"
+          stroke="#f3f3f3"
+          strokeWidth="30"
+          className="opacity-50"
         />
 
-        {/* Dark background */}
-        <path
-          d="M -100 0 A 100 100 0 0 1 100 0"
-          fill="#1A1F2C"
-          className="drop-shadow-inner"
-        />
-
-        {/* Tick marks */}
-        {Array.from({ length: 11 }).map((_, i) => {
-          const angle = -90 + (i * 18);
-          const isMainTick = i % 2 === 0;
+        {/* Tick marks and labels */}
+        {[0, 25, 50, 75, 100].map((tick) => {
+          const angle = -90 + (tick * 1.8);
+          const radian = (angle * Math.PI) / 180;
+          const x = 75 * Math.cos(radian);
+          const y = 75 * Math.sin(radian);
+          const textX = 95 * Math.cos(radian);
+          const textY = 95 * Math.sin(radian);
+          
           return (
-            <line
-              key={i}
-              x1={isMainTick ? 75 : 85}
-              y1="0"
-              x2="95"
-              y2="0"
-              stroke="#FFFFFF"
-              strokeWidth={isMainTick ? 3 : 2}
-              transform={`rotate(${angle})`}
-              opacity={isMainTick ? 1 : 0.7}
-            />
+            <g key={tick}>
+              <line
+                x1={x * 0.95}
+                y1={y * 0.95}
+                x2={x}
+                y2={y}
+                stroke="#666"
+                strokeWidth="2"
+              />
+              <text
+                x={textX}
+                y={textY}
+                textAnchor="middle"
+                fontSize="10"
+                fill="#666"
+                transform={`rotate(${angle + 90} ${textX} ${textY})`}
+              >
+                {tick}
+              </text>
+            </g>
           );
         })}
 
-        {/* Value arc */}
-        <path
-          d="M -90 0 A 90 90 0 0 1 90 0"
-          fill="none"
-          stroke="url(#gaugeGradient)"
-          strokeWidth="12"
-          strokeLinecap="round"
-          opacity="0.6"
-          className="drop-shadow-md"
-        />
-
-        {/* Active value arc */}
-        <path
-          d="M -90 0 A 90 90 0 0 1 90 0"
-          fill="none"
-          stroke={getSentimentColor(normalizedValue)}
-          strokeWidth="12"
-          strokeLinecap="round"
-          strokeDasharray={`${normalizedValue * 2.82}, 282`}
-          className="transition-all duration-1000 drop-shadow-lg"
-          transform="rotate(-90)"
-        />
+        {/* Sentiment labels */}
+        {[
+          { text: "EXTREME\nFEAR", angle: -90, offset: -40 },
+          { text: "FEAR", angle: -45, offset: -25 },
+          { text: "NEUTRAL", angle: 0, offset: -20 },
+          { text: "GREED", angle: 45, offset: -25 },
+          { text: "EXTREME\nGREED", angle: 90, offset: -40 }
+        ].map((label) => {
+          const radian = (label.angle * Math.PI) / 180;
+          const x = (90 + label.offset) * Math.cos(radian);
+          const y = (90 + label.offset) * Math.sin(radian);
+          
+          return (
+            <text
+              key={label.text}
+              x={x}
+              y={y}
+              textAnchor="middle"
+              fontSize="12"
+              fill="#666"
+              className="font-semibold"
+            >
+              {label.text.split('\n').map((line, i) => (
+                <tspan key={i} x={x} dy={i ? "1.2em" : "0"}>
+                  {line}
+                </tspan>
+              ))}
+            </text>
+          );
+        })}
 
         {/* Needle */}
         <g
-          className="transition-all duration-1000"
+          className="transition-transform duration-1000"
           style={{
             transform: `rotate(${rotation}deg)`,
+            transformOrigin: "center",
           }}
         >
-          <path
-            d="M -2 0 L 0 -75 L 2 0 Z"
-            fill="url(#needleGradient)"
-            className="drop-shadow-lg"
+          <line
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="-75"
+            stroke="#000"
+            strokeWidth="2"
           />
           <circle
             cx="0"
             cy="0"
-            r="12"
-            fill="url(#metalRing)"
-            className="drop-shadow-xl"
+            r="5"
+            fill="#000"
           />
         </g>
 
-        {/* Value text */}
+        {/* Center value */}
         <text
           x="0"
           y="40"
           textAnchor="middle"
-          className="text-4xl font-bold fill-white drop-shadow-lg"
-          style={{ fontSize: '2rem' }}
+          className="text-4xl font-bold"
+          fill="#000"
         >
           {normalizedValue}
-        </text>
-        
-        {/* Sentiment text */}
-        <text
-          x="0"
-          y="70"
-          textAnchor="middle"
-          className="text-xl font-semibold fill-white drop-shadow-md"
-          style={{ fontSize: '1rem' }}
-        >
-          {getSentimentText(normalizedValue)}
         </text>
       </svg>
     </div>
