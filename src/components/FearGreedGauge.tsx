@@ -17,16 +17,16 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
   // Normalize value between 0 and 100
   const normalizedValue = Math.min(Math.max(value, 0), 100);
   
-  // Calculate rotation based on value (adjusted for 180 degrees)
+  // Calculate rotation based on value (180 degree arc)
   const rotation = -90 + ((normalizedValue / 100) * 180);
   
   // Determine sentiment color
   const getSentimentColor = (value: number) => {
-    if (value <= 25) return '#ef4444';
-    if (value <= 45) return '#f97316';
-    if (value <= 55) return '#eab308';
-    if (value <= 75) return '#22c55e';
-    return '#16a34a';
+    if (value <= 25) return '#ef4444'; // Extreme Fear - Red
+    if (value <= 45) return '#f97316'; // Fear - Orange
+    if (value <= 55) return '#eab308'; // Neutral - Yellow
+    if (value <= 75) return '#22c55e'; // Greed - Light Green
+    return '#16a34a'; // Extreme Greed - Dark Green
   };
 
   // Get sentiment text
@@ -42,8 +42,8 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
     <div className={cn("relative flex flex-col items-center", className)}>
       <svg
         width={size}
-        height={(size / 2) + 60} // Adjusted height for half circle
-        viewBox="-120 -120 240 180" // Adjusted viewBox for half circle
+        height={(size / 2) + 60}
+        viewBox="-120 -120 240 180"
         className="transform"
       >
         {/* Metallic ring gradient */}
