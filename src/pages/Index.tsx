@@ -4,13 +4,7 @@ import { fetchFearGreedIndex } from '@/services/fearGreedApi';
 import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
-  const [fearGreedValue, setFearGreedValue] = useState(38);
-  const [historicalData, setHistoricalData] = useState({
-    previousClose: 'Fear',
-    oneWeekAgo: 'Fear',
-    oneMonthAgo: 'Neutral',
-    oneYearAgo: 'Greed'
-  });
+  const [fearGreedValue, setFearGreedValue] = useState(50);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -46,26 +40,6 @@ const Index = () => {
         <div className="max-w-2xl mx-auto">
           <FearGreedGauge value={fearGreedValue} className="mb-8" />
           
-          {/* Historical Data */}
-          <div className="space-y-2 text-gray-300 mb-8">
-            <div className="flex justify-between">
-              <span>Previous close</span>
-              <span className="font-medium">{historicalData.previousClose}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>1 week ago</span>
-              <span className="font-medium">{historicalData.oneWeekAgo}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>1 month ago</span>
-              <span className="font-medium">{historicalData.oneMonthAgo}</span>
-            </div>
-            <div className="flex justify-between">
-              <span>1 year ago</span>
-              <span className="font-medium">{historicalData.oneYearAgo}</span>
-            </div>
-          </div>
-
           {/* Description */}
           <div className="space-y-6 text-gray-300">
             <section>

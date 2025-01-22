@@ -18,15 +18,15 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
   const normalizedValue = Math.min(Math.max(value, 0), 100);
   
   // Calculate rotation based on value (adjusted for proper orientation)
-  const rotation = (normalizedValue / 100) * 180;
+  const rotation = -90 + ((normalizedValue / 100) * 180);
   
-  // Determine sentiment color with updated color scheme
+  // Determine sentiment color
   const getSentimentColor = (value: number) => {
-    if (value <= 25) return 'text-red-500';
-    if (value <= 45) return 'text-orange-400';
-    if (value <= 55) return 'text-yellow-400';
-    if (value <= 75) return 'text-green-400';
-    return 'text-green-500';
+    if (value <= 25) return '#ef4444';
+    if (value <= 45) return '#f97316';
+    if (value <= 55) return '#eab308';
+    if (value <= 75) return '#22c55e';
+    return '#16a34a';
   };
 
   // Get sentiment text
@@ -39,83 +39,90 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
   };
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn("relative flex flex-col items-center", className)}>
       <svg
         width={size}
-        height={size / 1.6}
-        viewBox="0 0 300 200"
-        className="transform rotate-0"
+        height={size}
+        viewBox="-120 -120 240 240"
+        className="transform"
       >
-        {/* Background arc with gradient */}
+        {/* Background gradient */}
         <defs>
           <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style={{ stopColor: '#ef4444', stopOpacity: 0.2 }} />
-            <stop offset="50%" style={{ stopColor: '#eab308', stopOpacity: 0.2 }} />
-            <stop offset="100%" style={{ stopColor: '#22c55e', stopOpacity: 0.2 }} />
+            <stop offset="0%" stopColor="#ef4444" stopOpacity="0.2" />
+            <stop offset="50%" stopColor="#eab308" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="#22c55e" stopOpacity="0.2" />
           </linearGradient>
         </defs>
-        
+
+        {/* Background arc */}
         <path
-          d="M 50 150 A 100 100 0 0 1 250 150"
+          d="M -90 0 A 90 90 0 0 1 90 0"
           fill="none"
           stroke="url(#gaugeGradient)"
-          strokeWidth="35"
+          strokeWidth="30"
           strokeLinecap="round"
           className="transition-all duration-300"
         />
-        
+
         {/* Value arc */}
         <path
-          d="M 50 150 A 100 100 0 0 1 250 150"
+          d="M -90 0 A 90 90 0 0 1 90 0"
           fill="none"
-          stroke="currentColor"
-          strokeWidth="35"
+          stroke={getSentimentColor(normalizedValue)}
+          strokeWidth="30"
           strokeLinecap="round"
-          strokeDasharray={`${normalizedValue}, 100`}
-          className={cn(
-            "transition-all duration-1000 drop-shadow-lg",
-            getSentimentColor(normalizedValue),
-            mounted && "animate-gauge-progress"
-          )}
-          style={{ "--gauge-value": normalizedValue } as React.CSSProperties}
+          strokeDasharray={`${normalizedValue * 2.82}, 282`}
+          className="transition-all duration-1000 drop-shadow-lg"
+          transform="rotate(-90)"
         />
-        
+
         {/* Needle */}
         <g
-          className="transition-all duration-1000 origin-center"
+          className="transition-all duration-1000"
           style={{
             transform: `rotate(${rotation}deg)`,
-            transformOrigin: '150px 150px',
           }}
         >
           <line
-            x1="150"
-            y1="150"
-            x2="150"
-            y2="60"
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="-80"
             stroke="#ffffff"
-            strokeWidth="3"
+            strokeWidth="4"
             className="drop-shadow-md"
           />
           <circle
-            cx="150"
-            cy="150"
-            r="12"
+            cx="0"
+            cy="0"
+            r="15"
             fill="#ffffff"
             className="drop-shadow-lg"
           />
         </g>
-      </svg>
-      
-      {/* Value display */}
-      <div className="absolute inset-0 flex flex-col items-center justify-end pb-4">
-        <span className={cn("text-6xl font-bold drop-shadow-lg", getSentimentColor(normalizedValue))}>
+
+        {/* Center text */}
+        <text
+          x="0"
+          y="50"
+          textAnchor="middle"
+          className="text-4xl font-bold fill-white drop-shadow-lg"
+          style={{ fontSize: '2.5rem' }}
+        >
           {normalizedValue}
-        </span>
-        <span className="text-2xl font-semibold text-white mt-2 drop-shadow-md">
+        </text>
+        
+        <text
+          x="0"
+          y="80"
+          textAnchor="middle"
+          className="text-xl font-semibold fill-white drop-shadow-md"
+          style={{ fontSize: '1.25rem' }}
+        >
           {getSentimentText(normalizedValue)}
-        </span>
-      </div>
+        </text>
+      </svg>
     </div>
   );
 };
