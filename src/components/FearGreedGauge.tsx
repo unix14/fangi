@@ -46,31 +46,85 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
         viewBox="-120 -120 240 240"
         className="transform"
       >
-        {/* Background gradient */}
+        {/* Metallic ring gradient */}
         <defs>
+          <linearGradient id="metalRing" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#8E9196" />
+            <stop offset="50%" stopColor="#8A898C" />
+            <stop offset="100%" stopColor="#555555" />
+          </linearGradient>
+          
+          {/* Background gradient */}
           <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ef4444" stopOpacity="0.2" />
-            <stop offset="50%" stopColor="#eab308" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="#22c55e" stopOpacity="0.2" />
+            <stop offset="0%" stopColor="#ef4444" />
+            <stop offset="50%" stopColor="#eab308" />
+            <stop offset="100%" stopColor="#22c55e" />
+          </linearGradient>
+
+          {/* Metallic effect for needle */}
+          <linearGradient id="needleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#D1D1D1" />
+            <stop offset="50%" stopColor="#F5F5F5" />
+            <stop offset="100%" stopColor="#D1D1D1" />
           </linearGradient>
         </defs>
 
-        {/* Background arc */}
-        <path
-          d="M -90 0 A 90 90 0 0 1 90 0"
+        {/* Outer metallic ring */}
+        <circle
+          cx="0"
+          cy="0"
+          r="110"
           fill="none"
-          stroke="url(#gaugeGradient)"
-          strokeWidth="30"
-          strokeLinecap="round"
-          className="transition-all duration-300"
+          stroke="url(#metalRing)"
+          strokeWidth="8"
+          className="drop-shadow-lg"
         />
+
+        {/* Dark background */}
+        <circle
+          cx="0"
+          cy="0"
+          r="100"
+          fill="#1A1F2C"
+          className="drop-shadow-inner"
+        />
+
+        {/* Tick marks */}
+        {Array.from({ length: 11 }).map((_, i) => {
+          const angle = -90 + (i * 18);
+          const isMainTick = i % 2 === 0;
+          return (
+            <line
+              key={i}
+              x1={isMainTick ? 75 : 85}
+              y1="0"
+              x2="95"
+              y2="0"
+              stroke="#FFFFFF"
+              strokeWidth={isMainTick ? 3 : 2}
+              transform={`rotate(${angle})`}
+              opacity={isMainTick ? 1 : 0.7}
+            />
+          );
+        })}
 
         {/* Value arc */}
         <path
           d="M -90 0 A 90 90 0 0 1 90 0"
           fill="none"
+          stroke="url(#gaugeGradient)"
+          strokeWidth="12"
+          strokeLinecap="round"
+          opacity="0.6"
+          className="drop-shadow-md"
+        />
+
+        {/* Active value arc */}
+        <path
+          d="M -90 0 A 90 90 0 0 1 90 0"
+          fill="none"
           stroke={getSentimentColor(normalizedValue)}
-          strokeWidth="30"
+          strokeWidth="12"
           strokeLinecap="round"
           strokeDasharray={`${normalizedValue * 2.82}, 282`}
           className="transition-all duration-1000 drop-shadow-lg"
@@ -84,41 +138,38 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
             transform: `rotate(${rotation}deg)`,
           }}
         >
-          <line
-            x1="0"
-            y1="0"
-            x2="0"
-            y2="-80"
-            stroke="#ffffff"
-            strokeWidth="4"
-            className="drop-shadow-md"
+          <path
+            d="M -2 0 L 0 -75 L 2 0 Z"
+            fill="url(#needleGradient)"
+            className="drop-shadow-lg"
           />
           <circle
             cx="0"
             cy="0"
-            r="15"
-            fill="#ffffff"
-            className="drop-shadow-lg"
+            r="12"
+            fill="url(#metalRing)"
+            className="drop-shadow-xl"
           />
         </g>
 
-        {/* Center text */}
+        {/* Value text */}
         <text
           x="0"
-          y="50"
+          y="40"
           textAnchor="middle"
           className="text-4xl font-bold fill-white drop-shadow-lg"
-          style={{ fontSize: '2.5rem' }}
+          style={{ fontSize: '2rem' }}
         >
           {normalizedValue}
         </text>
         
+        {/* Sentiment text */}
         <text
           x="0"
-          y="80"
+          y="70"
           textAnchor="middle"
           className="text-xl font-semibold fill-white drop-shadow-md"
-          style={{ fontSize: '1.25rem' }}
+          style={{ fontSize: '1rem' }}
         >
           {getSentimentText(normalizedValue)}
         </text>
