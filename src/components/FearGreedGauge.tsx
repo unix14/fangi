@@ -14,19 +14,15 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
     setMounted(true);
   }, []);
 
-  // Normalize value between 0 and 100
   const normalizedValue = Math.min(Math.max(value, 0), 100);
-  
-  // Calculate rotation based on value (180 degree arc)
   const rotation = -90 + ((normalizedValue / 100) * 180);
 
-  // Get sentiment text based on value
-  const getSentimentText = (value: number) => {
-    if (value <= 25) return 'EXTREME\nFEAR';
-    if (value <= 45) return 'FEAR';
-    if (value <= 55) return 'NEUTRAL';
-    if (value <= 75) return 'GREED';
-    return 'EXTREME\nGREED';
+  const getSentimentColor = (value: number) => {
+    if (value <= 25) return '#E31B23';  // Extreme Fear - Red
+    if (value <= 45) return '#FF9800';  // Fear - Orange
+    if (value <= 55) return '#FFD700';  // Neutral - Yellow
+    if (value <= 75) return '#4CAF50';  // Greed - Green
+    return '#2E7D32';  // Extreme Greed - Dark Green
   };
 
   return (
@@ -37,24 +33,26 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
         viewBox="-100 -80 200 160"
         className="transform"
       >
-        {/* Background gradient */}
         <defs>
           <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#f3f3f3" />
-            <stop offset="100%" stopColor="#f3f3f3" />
+            <stop offset="0%" stopColor="#E31B23" />
+            <stop offset="25%" stopColor="#FF9800" />
+            <stop offset="50%" stopColor="#FFD700" />
+            <stop offset="75%" stopColor="#4CAF50" />
+            <stop offset="100%" stopColor="#2E7D32" />
           </linearGradient>
         </defs>
 
-        {/* Main background arc */}
+        {/* Background arc */}
         <path
           d="M -90 0 A 90 90 0 0 1 90 0"
           fill="none"
-          stroke="#f3f3f3"
+          stroke="url(#gaugeGradient)"
           strokeWidth="30"
-          className="opacity-50"
+          className="opacity-90"
         />
 
-        {/* Tick marks and labels */}
+        {/* Tick marks and values */}
         {[0, 25, 50, 75, 100].map((tick) => {
           const angle = -90 + (tick * 1.8);
           const radian = (angle * Math.PI) / 180;
@@ -70,15 +68,16 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
                 y1={y * 0.95}
                 x2={x}
                 y2={y}
-                stroke="#666"
-                strokeWidth="2"
+                stroke="#333"
+                strokeWidth="3"
               />
               <text
                 x={textX}
                 y={textY}
                 textAnchor="middle"
-                fontSize="10"
-                fill="#666"
+                fontSize="12"
+                fill="#333"
+                fontWeight="600"
                 transform={`rotate(${angle + 90} ${textX} ${textY})`}
               >
                 {tick}
@@ -105,9 +104,10 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
               x={x}
               y={y}
               textAnchor="middle"
-              fontSize="12"
-              fill="#666"
-              className="font-semibold"
+              fontSize="11"
+              fill="#333"
+              fontWeight="700"
+              className="font-sans"
             >
               {label.text.split('\n').map((line, i) => (
                 <tspan key={i} x={x} dy={i ? "1.2em" : "0"}>
@@ -128,17 +128,17 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
         >
           <line
             x1="0"
-            y1="0"
+            y1="5"
             x2="0"
             y2="-75"
-            stroke="#000"
-            strokeWidth="2"
+            stroke="#333"
+            strokeWidth="3"
           />
           <circle
             cx="0"
             cy="0"
-            r="5"
-            fill="#000"
+            r="8"
+            fill="#333"
           />
         </g>
 
@@ -147,8 +147,8 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
           x="0"
           y="40"
           textAnchor="middle"
-          className="text-4xl font-bold"
-          fill="#000"
+          className="text-4xl font-bold font-sans"
+          fill="#333"
         >
           {normalizedValue}
         </text>
