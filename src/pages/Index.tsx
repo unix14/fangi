@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FearGreedGauge } from '@/components/FearGreedGauge';
+import { FearGreedIndicator } from '@/components/FearGreedIndicator';
 import { fetchFearGreedIndex } from '@/services/fearGreedApi';
 import { useToast } from '@/hooks/use-toast';
 
@@ -28,19 +28,16 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-financial-navy to-gray-900 text-white">
-      {/* Header */}
       <header className="p-4 flex justify-center items-center">
         <h1 className="text-sm font-light text-center text-white/80">
           Fear & Greed Index
         </h1>
       </header>
 
-      {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          <FearGreedGauge value={fearGreedValue} className="mb-8" />
+          <FearGreedIndicator value={fearGreedValue} className="mb-8" />
           
-          {/* Description */}
           <div className="space-y-6 text-gray-300">
             <section>
               <h2 className="text-xl font-bold text-white mb-2">What is Fear & Greed Index?</h2>
@@ -62,7 +59,6 @@ const Index = () => {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="py-4 text-center text-sm text-gray-400">
         <a
           href="https://github.com/unix14"
