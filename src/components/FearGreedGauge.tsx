@@ -17,14 +17,6 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
   const normalizedValue = Math.min(Math.max(value, 0), 100);
   const rotation = -90 + ((normalizedValue / 100) * 180);
 
-  const getSentimentColor = (value: number) => {
-    if (value <= 25) return '#E31B23';  // Extreme Fear - Red
-    if (value <= 45) return '#FF9800';  // Fear - Orange
-    if (value <= 55) return '#FFD700';  // Neutral - Yellow
-    if (value <= 75) return '#4CAF50';  // Greed - Green
-    return '#2E7D32';  // Extreme Greed - Dark Green
-  };
-
   return (
     <div className={cn("relative flex flex-col items-center", className)}>
       <svg
@@ -35,11 +27,11 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
       >
         <defs>
           <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#E31B23" />
-            <stop offset="25%" stopColor="#FF9800" />
-            <stop offset="50%" stopColor="#FFD700" />
-            <stop offset="75%" stopColor="#4CAF50" />
-            <stop offset="100%" stopColor="#2E7D32" />
+            <stop offset="0%" stopColor="#DC2626" />
+            <stop offset="25%" stopColor="#F59E0B" />
+            <stop offset="50%" stopColor="#FCD34D" />
+            <stop offset="75%" stopColor="#34D399" />
+            <stop offset="100%" stopColor="#059669" />
           </linearGradient>
         </defs>
 
@@ -47,12 +39,21 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
         <path
           d="M -90 0 A 90 90 0 0 1 90 0"
           fill="none"
-          stroke="url(#gaugeGradient)"
-          strokeWidth="30"
-          className="opacity-90"
+          stroke="#E5E7EB"
+          strokeWidth="24"
+          className="opacity-30"
         />
 
-        {/* Tick marks and values */}
+        {/* Colored arc */}
+        <path
+          d="M -90 0 A 90 90 0 0 1 90 0"
+          fill="none"
+          stroke="url(#gaugeGradient)"
+          strokeWidth="24"
+          className="drop-shadow-lg"
+        />
+
+        {/* Tick marks */}
         {[0, 25, 50, 75, 100].map((tick) => {
           const angle = -90 + (tick * 1.8);
           const radian = (angle * Math.PI) / 180;
@@ -68,17 +69,19 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
                 y1={y * 0.95}
                 x2={x}
                 y2={y}
-                stroke="#333"
-                strokeWidth="3"
+                stroke="#4B5563"
+                strokeWidth="2"
+                className="drop-shadow-sm"
               />
               <text
                 x={textX}
                 y={textY}
                 textAnchor="middle"
                 fontSize="12"
-                fill="#333"
+                fill="#4B5563"
                 fontWeight="600"
                 transform={`rotate(${angle + 90} ${textX} ${textY})`}
+                className="drop-shadow-sm"
               >
                 {tick}
               </text>
@@ -86,13 +89,13 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
           );
         })}
 
-        {/* Sentiment labels */}
+        {/* Labels */}
         {[
-          { text: "EXTREME\nFEAR", angle: -90, offset: -40 },
-          { text: "FEAR", angle: -45, offset: -25 },
-          { text: "NEUTRAL", angle: 0, offset: -20 },
-          { text: "GREED", angle: 45, offset: -25 },
-          { text: "EXTREME\nGREED", angle: 90, offset: -40 }
+          { text: "Extreme\nFear", angle: -90, offset: -40 },
+          { text: "Fear", angle: -45, offset: -25 },
+          { text: "Neutral", angle: 0, offset: -20 },
+          { text: "Greed", angle: 45, offset: -25 },
+          { text: "Extreme\nGreed", angle: 90, offset: -40 }
         ].map((label) => {
           const radian = (label.angle * Math.PI) / 180;
           const x = (90 + label.offset) * Math.cos(radian);
@@ -105,9 +108,9 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
               y={y}
               textAnchor="middle"
               fontSize="11"
-              fill="#333"
-              fontWeight="700"
-              className="font-sans"
+              fill="#374151"
+              fontWeight="600"
+              className="font-sans drop-shadow-sm"
             >
               {label.text.split('\n').map((line, i) => (
                 <tspan key={i} x={x} dy={i ? "1.2em" : "0"}>
@@ -120,7 +123,7 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
 
         {/* Needle */}
         <g
-          className="transition-transform duration-1000"
+          className="transition-transform duration-1000 ease-in-out"
           style={{
             transform: `rotate(${rotation}deg)`,
             transformOrigin: "center",
@@ -130,25 +133,27 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
             x1="0"
             y1="5"
             x2="0"
-            y2="-75"
-            stroke="#333"
-            strokeWidth="3"
+            y2="-70"
+            stroke="#1F2937"
+            strokeWidth="4"
+            className="drop-shadow-md"
           />
           <circle
             cx="0"
             cy="0"
             r="8"
-            fill="#333"
+            fill="#1F2937"
+            className="drop-shadow-md"
           />
         </g>
 
-        {/* Center value */}
+        {/* Value display */}
         <text
           x="0"
           y="40"
           textAnchor="middle"
-          className="text-4xl font-bold font-sans"
-          fill="#333"
+          className="text-4xl font-bold font-sans drop-shadow-sm"
+          fill="#1F2937"
         >
           {normalizedValue}
         </text>
