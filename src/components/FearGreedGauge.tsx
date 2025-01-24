@@ -21,8 +21,8 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
     <div className={cn("relative flex flex-col items-center", className)}>
       <svg
         width={size}
-        height={size / 1.5}
-        viewBox="-100 -50 200 150"
+        height={size / 1.2}
+        viewBox="-100 -100 200 160"
         className="transform"
       >
         <defs>
@@ -54,39 +54,39 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
         {/* Labels */}
         <g className="text-[14px] fill-gray-300 font-medium">
           {/* Extreme Fear */}
-          <text x="-85" y="40" textAnchor="middle">
+          <text x="-85" y="30" textAnchor="middle" transform="rotate(-45 -85 30)">
             <tspan x="-85">Extreme</tspan>
-            <tspan x="-85" dy="20">Fear</tspan>
+            <tspan x="-85" dy="16">Fear</tspan>
           </text>
           
           {/* Fear */}
-          <text x="-45" y="25" textAnchor="middle">Fear</text>
+          <text x="-45" y="20" textAnchor="middle" transform="rotate(-22.5 -45 20)">Fear</text>
           
           {/* Neutral */}
           <text x="0" y="15" textAnchor="middle">Neutral</text>
           
           {/* Greed */}
-          <text x="45" y="25" textAnchor="middle">Greed</text>
+          <text x="45" y="20" textAnchor="middle" transform="rotate(22.5 45 20)">Greed</text>
           
           {/* Extreme Greed */}
-          <text x="85" y="40" textAnchor="middle">
+          <text x="85" y="30" textAnchor="middle" transform="rotate(45 85 30)">
             <tspan x="85">Extreme</tspan>
-            <tspan x="85" dy="20">Greed</tspan>
+            <tspan x="85" dy="16">Greed</tspan>
           </text>
         </g>
 
-        {/* Tick marks */}
+        {/* Tick marks - only on the arc */}
         {[0, 25, 50, 75, 100].map((tick) => {
           const angle = -90 + (tick * 1.8);
           const radian = (angle * Math.PI) / 180;
-          const x = 75 * Math.cos(radian);
-          const y = 75 * Math.sin(radian);
+          const x = 90 * Math.cos(radian);
+          const y = 90 * Math.sin(radian);
           
           return (
             <g key={tick}>
               <line
-                x1={x * 0.95}
-                y1={y * 0.95}
+                x1={x * 0.9}
+                y1={y * 0.9}
                 x2={x}
                 y2={y}
                 stroke="#94A3B8"
@@ -94,8 +94,8 @@ export const FearGreedGauge = ({ value, size = 300, className }: GaugeProps) => 
                 className="opacity-50"
               />
               <text
-                x={x * 1.2}
-                y={y * 1.2}
+                x={x * 0.8}
+                y={y * 0.8}
                 textAnchor="middle"
                 fontSize="12"
                 fill="#94A3B8"
